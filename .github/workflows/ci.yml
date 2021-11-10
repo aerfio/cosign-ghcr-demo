@@ -41,9 +41,13 @@ jobs:
           tags: ${{ steps.docker_meta.outputs.tags }}
       - name: Sign image with a key
         run: |
-          echo ${COSIGN_KEY} > /tmp/cosign.key && \
-          cosign sign -key /tmp/cosign.key ${TAGS}
+          echo "${COSIGN_KEY}"9 > /tmp/cosign.key && \
+          cosign sign --key /tmp/cosign.key ${TAGS}
         env:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3          
+        timeout-minutes: 10
