@@ -47,7 +47,7 @@ jobs:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3          
-        timeout-minutes: 10
+      # - name: Setup tmate session
+        # if: ${{ failure() }}
+        # uses: mxschmitt/action-tmate@v3          
+        # timeout-minutes: 10
