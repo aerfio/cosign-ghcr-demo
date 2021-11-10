@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v1.3.0
+        with:
+          cosign-release: 'v1.3.0'        
       - name: Login to Github Packages
         uses: docker/login-action@v1
         with:
@@ -19,7 +23,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
       - name: Docker meta
-        id: meta
+        id: docker_meta
         uses: docker/metadata-action@v3
         with:
           images: |
@@ -34,10 +38,12 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ steps.meta.outputs.tags }}
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v1.3.0
-        with:
-          cosign-release: 'v1.3.0'
-      - name: Check install!
-        run: cosign version
+          tags: ${{ steps.docker_meta.outputs.tags }}
+      - name: Sign image with a key
+        run: |
+          echo ${COSIGN_KEY} > /tmp/cosign.key && \
+          cosign sign -key /tmp/cosign.key ${TAGS}
+        env:
+          TAGS: ${{ steps.docker_meta.outputs.tags }}
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}

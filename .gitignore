@@ -3,3 +3,4 @@ cosign-ghcr-demo
 
 .idea
 .vscode
+cosign.key
