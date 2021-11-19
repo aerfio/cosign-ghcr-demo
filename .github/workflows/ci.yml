@@ -36,6 +36,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
+          push: true          
           tags: ${{ steps.docker_meta.outputs.tags }}
       - name: Sign image with a key
         run: |
