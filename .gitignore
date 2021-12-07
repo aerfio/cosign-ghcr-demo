@@ -1,6 +1,6 @@
 app
 cosign-ghcr-demo
 
-.idea
 .vscode
+.idea
 cosign.key
